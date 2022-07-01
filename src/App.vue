@@ -1,4 +1,5 @@
 <template >
+
   <div class="min-h-screen  transition duration-500" :class="
     tab == 1 ? 'bg-[#D95550]' : tab == 2 ? 'bg-[#4c9195]' : 'bg-[#457d9f]'
   ">
@@ -22,17 +23,17 @@
             <div class="flex flex-row items-center justify-center  text-white text-sm md:text-md lg:text-lg ">
               <div class="mx-2"
                 :class="(tab === 1) ? ` bg-black bg-opacity-20 px-2 py-1 rounded-md font-bold cursor-pointer  ` : `cursor-pointer`"
-                @click="switchTab('pomo')">
+                @click="switchTab(1)">
                 <a>Pomodoro</a>
               </div>
               <div class="mx-2"
                 :class="(tab === 2) ? ` bg-black bg-opacity-20 px-2 py-1 rounded-md font-bold cursor-pointer ` : ` cursor-pointer`"
-                @click="switchTab('short')">
+                @click="switchTab(2)">
                 <a>Short Break</a>
               </div>
               <div class="mx-2"
                 :class="(tab === 3) ? ` bg-black bg-opacity-20 px-2 py-1 rounded-md font-bold cursor-pointer ` : `cursor-pointer`"
-                @click="switchTab('long')">
+                @click="switchTab(3)">
                 <a>Long Break</a>
               </div>
             </div>
@@ -44,7 +45,7 @@
 
             <div class="buttons flex items-center justify-center font-bold text-xl ">
 
-              <button class="py-4 px-6 bg-white border-4 border-b-black " v-show="!timerRunning" @click="startTimer()">
+              <button class="py-3 px-10 bg-white border-4 border-b-black " v-show="!timerRunning" @click="startTimer()">
                 <span :class="
                   tab == 1
                     ? 'text-[#D95550]'
@@ -55,7 +56,7 @@
                   START
                 </span>
               </button>
-              <button class="py-4 px-6 bg-white  border" v-show="timerRunning" @click="stopTimer()">
+              <button class="py-3 px-10 bg-white  border" v-show="timerRunning" @click="stopTimer()">
                 <span :class="
                   tab == 1
                     ? 'text-[#D95550]'
@@ -81,9 +82,36 @@
                   <img src="./assets/remove-black-sm.png" alt="close button" class="w-3 h-3 ">
                 </div>
               </div>
-              <div>sdf</div>
+              <div class="timesettings ">
+                <span>Time (minutes)</span>
+                <div class="flex flex-row">
+                  <div>
+                    <label for="pomodoroTime" class="text-gray-400 ">Pomodoro</label> <br>
+                    <input type="number" name="pomodoroTime" min="0" :value="pomodoroTime / 60"
+                      @change="tabTimeChanged($event, 1)"
+                      class="bg-gray-300 bg-opacity-30 w-7/12 font-light rounded-md px-2 py-2">
+                  </div>
+                  <div>
+                    <label for="pomodoroTime" class="text-gray-400 ">Short Break</label> <br>
+                    <input type="number" name="pomodoroTime" min="0" :value="shortBreakTime / 60"
+                      @change="tabTimeChanged($event, 2)"
+                      class="bg-gray-300 bg-opacity-30 w-7/12 font-light rounded-md px-2 py-2">
+                  </div>
+                  <div>
+                    <label for="pomodoroTime" class="text-gray-400 ">Long Break</label> <br>
+                    <input type="number" name="pomodoroTime" min="0" :value="longBreakTime / 60"
+                      @change="tabTimeChanged($event, 3)"
+                      class="bg-gray-300 bg-opacity-30 w-8/12 font-light rounded-md px-2 py-2">
+                  </div>
+                </div>
+              </div>
               <div>dsf</div>
               <div>sdf</div>
+              <div class="">
+                <button @click="confirmSettings()">
+                  ok
+                </button>
+              </div>
 
             </div>
           </div>
@@ -110,23 +138,23 @@ export default {
   data() {
     return {
       tab: 1,
-      pomo: 1500,
-      shortBreak: 300,
-      longBreak: 900,
+      pomodoroTime: 1500,
+      shortBreakTime: 300,
+      longBreakTime: 900,
       timeRemaining: 0,
       minutes: 0,
       seconds: 0,
       timeToShow: 0,
-      remainder: 0,
       timerRunning: false,
       interval: null,
-      settingsShow: false
+      settingsShow: false,
+
 
     }
   },
 
   mounted() {
-    this.resetTime(this.pomo);
+    this.resetTimeRemaining(this.pomodoroTime);
   },
 
   methods: {
@@ -167,32 +195,68 @@ export default {
 
 
     },
-    switchTab(tabName) {
-      if (tabName == 'pomo') {
-        this.tab = 1;
-        if (this.timerRunning == true) {
-          //confirm('Timer is running if you want to continue press ok') ;
+    switchTab(tabNumber) {
+        if(this.timerRunning){
+            if(!confirm('The timer is still running, are you sure you want to switch?')){
+                exit;
+            }
         }
-        this.stopTimer();
-        this.resetTime(this.pomo);
-      }
-      if (tabName == 'short') {
-        this.tab = 2;
-        this.stopTimer();
-        this.resetTime(this.shortBreak);
+      
+            if (tabNumber == 1) {
+              this.tab = 1;
+              this.stopTimer();
+              this.resetTimeRemaining(this.pomodoroTime);
 
-      }
-      if (tabName == 'long') {
-        this.tab = 3;
-        this.stopTimer();
-        this.resetTime(this.longBreak);
+            }
+            if (tabNumber == 2) {
+              this.tab = 2;
+              this.stopTimer();
+              this.resetTimeRemaining(this.shortBreakTime);
 
-      }
+            }
+            if (tabNumber == 3) {
+              this.tab = 3;
+              this.stopTimer();
+              this.resetTimeRemaining(this.longBreakTime);
+
+            }
+      
     },
-    resetTime(time) {
+    resetTimeRemaining(time) {
       this.timeRemaining = time;
       this.updateTime();
+    },
+    tabTimeChanged(event, tabNumber) {
+      if (tabNumber == 1) {
+        this.pomodoroTime = event.target.value * 60;
+      }
+      if (tabNumber == 2) {
+        this.shortBreakTime = event.target.value * 60;
+      }
+      if (tabNumber == 3) {
+        this.longBreakTime = event.target.value * 60;
+      }
+      this.switchTab(this.tab);
+    },
+    confirmChangeTab(tabNumber) {
+      if (confirm('The timer is still running, are you sure you want to switch?')) {
+        this.tab = tabNumber;
+        this.stopTimer();
+        switch (tabNumber) {
+          case 1:
+            this.resetTimeRemaining(this.pomodoroTime);
+            break;
+          case 2:
+            this.resetTimeRemaining(this.shortBreakTime);
+            break;
+          case 3:
+            this.resetTimeRemaining(this.longBreakTime);
+            break;
+
+        }
+      }
     }
+
 
   },
   props: {
