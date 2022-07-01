@@ -3,65 +3,90 @@
     tab == 1 ? 'bg-[#D95550]' : tab == 2 ? 'bg-[#4c9195]' : 'bg-[#457d9f]'
   ">
 
-    <div class="grid lg:grid-cols-3">
+    <div class="grid md:grid-cols-4">
       <div></div>
 
-      <div class="container flex flex-col items-center justify-center w-full">
-        <h1 class="text-2xl font-extrabold text-center text-white"> POMOFOCUS</h1>
-        <div class="container bg-white bg-opacity-20 p-4 w-full rounded-md">
-
-          <div class="flex flex-row justify-between text-white text-sm md:text-md lg:text-lg ">
-            <div
-              :class="(tab === 1) ? ` bg-black bg-opacity-20 px-2 py-1 rounded-md font-bold cursor-pointer  ` : `cursor-pointer`"
-              @click="switchTab('pomo')">
-              <a>Pomodoro</a>
-            </div>
-            <div
-              :class="(tab === 2) ? ` bg-black bg-opacity-20 px-2 py-1 rounded-md font-bold cursor-pointer ` : ` cursor-pointer`"
-              @click="switchTab('short')">
-              <a>Short Break</a>
-            </div>
-            <div
-              :class="(tab === 3) ? ` bg-black bg-opacity-20 px-2 py-1 rounded-md font-bold cursor-pointer ` : `cursor-pointer`"
-              @click="switchTab('long')">
-              <a>Long Break</a>
-            </div>
+      <div class="container col-span-2 divide-y-[1px] divide-black divide-opacity-20">
+        <div class="flex flex-row justify-between py-4 text-sm md:text-lg text-white">
+          <div>
+            <h1 class="font-extrabold">PomoFocus</h1>
           </div>
-
-          <div class="text-center p-3 ">
-            <span class="text-6xl md:text-7xl text-white font-bold">
-              {{ timeToShow }}
-            </span>
+          <div class="text-sm flex">
+            <button class="bg-white bg-opacity-20 px-2 rounded-md"
+              @click="settingsShow = !settingsShow">Settings</button>
           </div>
+        </div>
+        <div class="container flex justify-center items-center">
+          <div class="bg-white bg-opacity-20 p-4 w-8/12 items-center rounded-md mt-6">
 
-          <div class="buttons flex items-center justify-center font-bold text-xl ">
-
-            <button class="py-4 px-6 bg-white border border-b-black border-4 " v-show="!timerRunning" @click="startTimer()">
-              <span :class="
-                tab == 1
-                  ? 'text-[#D95550]'
-                  : tab == 2
-                    ? 'text-[#4c9195]'
-                    : 'text-[#457d9f]'
-              ">
-                START
+            <div class="flex flex-row items-center justify-center  text-white text-sm md:text-md lg:text-lg ">
+              <div class="mx-2"
+                :class="(tab === 1) ? ` bg-black bg-opacity-20 px-2 py-1 rounded-md font-bold cursor-pointer  ` : `cursor-pointer`"
+                @click="switchTab('pomo')">
+                <a>Pomodoro</a>
+              </div>
+              <div class="mx-2"
+                :class="(tab === 2) ? ` bg-black bg-opacity-20 px-2 py-1 rounded-md font-bold cursor-pointer ` : ` cursor-pointer`"
+                @click="switchTab('short')">
+                <a>Short Break</a>
+              </div>
+              <div class="mx-2"
+                :class="(tab === 3) ? ` bg-black bg-opacity-20 px-2 py-1 rounded-md font-bold cursor-pointer ` : `cursor-pointer`"
+                @click="switchTab('long')">
+                <a>Long Break</a>
+              </div>
+            </div>
+            <div class="text-center p-3 ">
+              <span class="text-6xl proportional-nums md:text-9xl text-white ">
+                {{ timeToShow }}
               </span>
-            </button>
-            <button class="py-4 px-6 bg-white  border" v-show="timerRunning" @click="stopTimer()">
-              <span :class="
-                tab == 1
-                  ? 'text-[#D95550]'
-                  : tab == 2
-                    ? 'text-[#4c9195]'
-                    : 'text-[#457d9f]'
-              ">
-                STOP
-              </span>
-            </button>
+            </div>
 
+            <div class="buttons flex items-center justify-center font-bold text-xl ">
+
+              <button class="py-4 px-6 bg-white border-4 border-b-black " v-show="!timerRunning" @click="startTimer()">
+                <span :class="
+                  tab == 1
+                    ? 'text-[#D95550]'
+                    : tab == 2
+                      ? 'text-[#4c9195]'
+                      : 'text-[#457d9f]'
+                ">
+                  START
+                </span>
+              </button>
+              <button class="py-4 px-6 bg-white  border" v-show="timerRunning" @click="stopTimer()">
+                <span :class="
+                  tab == 1
+                    ? 'text-[#D95550]'
+                    : tab == 2
+                      ? 'text-[#4c9195]'
+                      : 'text-[#457d9f]'
+                ">
+                  STOP
+                </span>
+              </button>
+
+
+            </div>
 
           </div>
+          <div v-if="settingsShow"
+            class="bg-[#00000066] flex justify-center lg:px-8 py-20 p-2 fixed top-0 w-screen min-h-screen">
+            <div
+              class="settings bg-white w-9/12 md:w-4/12 rounded-md divide-y-[1px] divide-black divide-opacity-20 p-3">
+              <div class="flex flex-row justify-between items-center mb-2">
+                <span class="font-medium text-gray-400 text-opacity-50 capitalize">TIMER SETTINGS</span>
+                <div class="cursor-pointer" @click="settingsShow = !settingsShow">
+                  <img src="./assets/remove-black-sm.png" alt="close button" class="w-3 h-3 ">
+                </div>
+              </div>
+              <div>sdf</div>
+              <div>dsf</div>
+              <div>sdf</div>
 
+            </div>
+          </div>
 
 
 
@@ -85,9 +110,9 @@ export default {
   data() {
     return {
       tab: 1,
-      pomo:1500,
-      shortBreak:300,
-      longBreak:900,
+      pomo: 1500,
+      shortBreak: 300,
+      longBreak: 900,
       timeRemaining: 0,
       minutes: 0,
       seconds: 0,
@@ -95,6 +120,7 @@ export default {
       remainder: 0,
       timerRunning: false,
       interval: null,
+      settingsShow: false
 
     }
   },
@@ -105,19 +131,19 @@ export default {
 
   methods: {
     startTimer() {
-      
+
       this.timerRunning = true;
-      this.timer();      
+      this.timer();
     },
-    timer(){
+    timer() {
       this.interval = setInterval(() => {
         this.timeRemaining--;
         this.updateTime();
-        if(this.timeRemaining <= 0){
-          
+        if (this.timeRemaining <= 0) {
+
           this.stopTimer();
         }
-        
+
       }, 1000);
 
     },
@@ -141,29 +167,29 @@ export default {
 
 
     },
-    switchTab(tabName){
-        if(tabName == 'pomo'){
-          this.tab = 1;
-          if(this.timerRunning == true){
-            //confirm('Timer is running if you want to continue press ok') ;
-          }
-          this.stopTimer();
-          this.resetTime(this.pomo);
+    switchTab(tabName) {
+      if (tabName == 'pomo') {
+        this.tab = 1;
+        if (this.timerRunning == true) {
+          //confirm('Timer is running if you want to continue press ok') ;
         }
-        if(tabName == 'short'){
-          this.tab = 2;
-          this.stopTimer();
-          this.resetTime(this.shortBreak);
+        this.stopTimer();
+        this.resetTime(this.pomo);
+      }
+      if (tabName == 'short') {
+        this.tab = 2;
+        this.stopTimer();
+        this.resetTime(this.shortBreak);
 
-        }
-        if(tabName == 'long'){
-          this.tab = 3;
-          this.stopTimer();
-          this.resetTime(this.longBreak);
+      }
+      if (tabName == 'long') {
+        this.tab = 3;
+        this.stopTimer();
+        this.resetTime(this.longBreak);
 
-        }
+      }
     },
-    resetTime(time){
+    resetTime(time) {
       this.timeRemaining = time;
       this.updateTime();
     }
