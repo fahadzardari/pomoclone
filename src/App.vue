@@ -3,40 +3,40 @@
     tab == 1 ? 'bg-[#D95550]' : tab == 2 ? 'bg-[#4c9195]' : 'bg-[#457d9f]'
   ">
 
-    <div class="grid grid-cols-3">
+    <div class="grid lg:grid-cols-3">
       <div></div>
 
-      <div>
+      <div class="container flex flex-col items-center justify-center w-full">
         <h1 class="text-2xl font-extrabold text-center text-white"> POMOFOCUS</h1>
         <div class="container bg-white bg-opacity-20 p-4 w-full rounded-md">
 
-          <div class="flex flex-row justify-between text-white text-xl  ">
+          <div class="flex flex-row justify-between text-white text-sm md:text-md lg:text-lg ">
             <div
-              :class="(tab === 1) ? ` bg-black bg-opacity-20 px-2 py-1 rounded-md font-bold cursor-pointer text-lg` : `cursor-pointer`"
+              :class="(tab === 1) ? ` bg-black bg-opacity-20 px-2 py-1 rounded-md font-bold cursor-pointer  ` : `cursor-pointer`"
               @click="switchTab('pomo')">
               <a>Pomodoro</a>
             </div>
             <div
-              :class="(tab === 2) ? ` bg-black bg-opacity-20 px-2 py-1 rounded-md font-bold cursor-pointer text-lg` : ` cursor-pointer`"
+              :class="(tab === 2) ? ` bg-black bg-opacity-20 px-2 py-1 rounded-md font-bold cursor-pointer ` : ` cursor-pointer`"
               @click="switchTab('short')">
               <a>Short Break</a>
             </div>
             <div
-              :class="(tab === 3) ? ` bg-black bg-opacity-20 px-2 py-1 rounded-md font-bold cursor-pointer text-lg` : `cursor-pointer`"
+              :class="(tab === 3) ? ` bg-black bg-opacity-20 px-2 py-1 rounded-md font-bold cursor-pointer ` : `cursor-pointer`"
               @click="switchTab('long')">
               <a>Long Break</a>
             </div>
           </div>
 
           <div class="text-center p-3 ">
-            <span class="text-7xl text-white font-bold">
+            <span class="text-6xl md:text-7xl text-white font-bold">
               {{ timeToShow }}
             </span>
           </div>
 
           <div class="buttons flex items-center justify-center font-bold text-xl ">
 
-            <button class="py-4 px-6 bg-white " v-show="!timerRunning" @click="startTimer()">
+            <button class="py-4 px-6 bg-white border border-b-black border-4 " v-show="!timerRunning" @click="startTimer()">
               <span :class="
                 tab == 1
                   ? 'text-[#D95550]'
@@ -47,7 +47,7 @@
                 START
               </span>
             </button>
-            <button class="py-4 px-6 bg-white " v-show="timerRunning" @click="stopTimer()">
+            <button class="py-4 px-6 bg-white  border" v-show="timerRunning" @click="stopTimer()">
               <span :class="
                 tab == 1
                   ? 'text-[#D95550]'
