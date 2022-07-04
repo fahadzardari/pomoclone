@@ -82,8 +82,8 @@
                   <img src="./assets/remove-black-sm.png" alt="close button" class="w-3 h-3 ">
                 </div>
               </div>
-              <div class="timesettings ">
-                <span>Time (minutes)</span>
+              <div class="timesettings py-5 ">
+                <span class="font-bold">Time (minutes)</span>
                 <div class="flex flex-row">
                   <div>
                     <label for="pomodoroTime" class="text-gray-400 ">Pomodoro</label> <br>
@@ -105,12 +105,31 @@
                   </div>
                 </div>
               </div>
-              <div>dsf</div>
-              <div>sdf</div>
-              <div class="">
-                <button @click="confirmSettings()">
-                  ok
-                </button>
+              <div class="flex flex-row justify-between py-5 pr-7">
+                <span class="text-lg font-bold">Auto Starts Break?</span>
+                <label for="check1" class="relative rounded-full  cursor-pointer w-16 h-8"
+                  :class="autoStartBreak ? 'bg-[#84c733]' : 'bg-[#cccccc]'">
+                  <input type="checkbox" id="check1" v-model="autoStartBreak" class="sr-only peer">
+                  <span class="bg-white w-2/5 h-4/5 absolute rounded-full left-1 top-[3px] peer-checked:left-9 "></span>
+
+                </label>
+              </div>
+              <div class="flex flex-row justify-between py-5 pr-7">
+                <span class="text-lg font-bold">Auto Starts Pomodoro?</span>
+                <label for="check2" class="relative rounded-full  cursor-pointer w-16 h-8"
+                  :class="autoStartPomodoro ? 'bg-[#84c733]' : 'bg-[#cccccc]'">
+                  <input type="checkbox" id="check2" v-model="autoStartPomodoro" class="sr-only peer">
+                  <span class="bg-white w-2/5 h-4/5 absolute rounded-full left-1 top-[3px] peer-checked:left-9 "></span>
+
+                </label>
+              </div>
+              <div class="flex flex-row justify-between py-5 pr-7">
+                
+                    <label for="interval" class="text-lg font-bold ">Long Break Interval</label>
+                    <input type="number" name="interval" min="1" :value="longBreakStartInterval"
+                      @change="longBreakInterval($event)"
+                      class="bg-gray-300 bg-opacity-30 w-2/12 font-light rounded-md px-2 py-2">
+                
               </div>
 
             </div>
@@ -138,8 +157,8 @@ export default {
   data() {
     return {
       tab: 1,
-      pomodoroTime: 1500,
-      shortBreakTime: 300,
+      pomodoroTime: 3,
+      shortBreakTime: 3,
       longBreakTime: 900,
       timeRemaining: 0,
       minutes: 0,
@@ -148,13 +167,23 @@ export default {
       timerRunning: false,
       interval: null,
       settingsShow: false,
+      autoStartBreak: true,
+      autoStartPomodoro: true,
+      longBreakStartInterval: 4
 
 
     }
   },
 
   mounted() {
+    this.pomodoroTime = localStorage.getItem("pomodoroTime") || 1500;
+    this.shortBreakTime = localStorage.getItem("shortBreakTime") || 300;
+    this.longBreakTime = localStorage.getItem("longBreakTime") || 900;
     this.resetTimeRemaining(this.pomodoroTime);
+    this.autoStartBreak = localStorage.getitem("autoStartBreak") || true;
+    this.autoStartPomodoro = localStorage.getItem("autoStartPomodoro") || true;
+    this.longBreakStartInterval = localStorage.getItem("longBreakInterval") || 4;
+
   },
 
   methods: {
@@ -170,6 +199,21 @@ export default {
         if (this.timeRemaining <= 0) {
 
           this.stopTimer();
+          if (this.tab == 1) {
+
+            if (this.autoStartBreak) {
+              this.tab = 2;
+              this.resetTimeRemaining(this.shortBreakTime);
+              this.startTimer();
+            }
+          } else
+            if (this.tab == 2 || this.tab == 3) {
+              if (this.autoStartPomodoro) {
+                this.tab = 1;
+                this.resetTimeRemaining(this.pomodoroTime);
+                this.startTimer();
+              }
+            }
         }
 
       }, 1000);
@@ -196,31 +240,31 @@ export default {
 
     },
     switchTab(tabNumber) {
-        if(this.timerRunning){
-            if(!confirm('The timer is still running, are you sure you want to switch?')){
-                exit;
-            }
+      if (this.timerRunning) {
+        if (!confirm('The timer is still running, are you sure you want to switch?')) {
+          exit;
         }
-      
-            if (tabNumber == 1) {
-              this.tab = 1;
-              this.stopTimer();
-              this.resetTimeRemaining(this.pomodoroTime);
+      }
 
-            }
-            if (tabNumber == 2) {
-              this.tab = 2;
-              this.stopTimer();
-              this.resetTimeRemaining(this.shortBreakTime);
+      if (tabNumber == 1) {
+        this.tab = 1;
+        this.stopTimer();
+        this.resetTimeRemaining(this.pomodoroTime);
 
-            }
-            if (tabNumber == 3) {
-              this.tab = 3;
-              this.stopTimer();
-              this.resetTimeRemaining(this.longBreakTime);
+      }
+      if (tabNumber == 2) {
+        this.tab = 2;
+        this.stopTimer();
+        this.resetTimeRemaining(this.shortBreakTime);
 
-            }
-      
+      }
+      if (tabNumber == 3) {
+        this.tab = 3;
+        this.stopTimer();
+        this.resetTimeRemaining(this.longBreakTime);
+
+      }
+
     },
     resetTimeRemaining(time) {
       this.timeRemaining = time;
@@ -229,14 +273,22 @@ export default {
     tabTimeChanged(event, tabNumber) {
       if (tabNumber == 1) {
         this.pomodoroTime = event.target.value * 60;
+        localStorage.setItem("pomodoroTime", this.pomodoroTime);
       }
       if (tabNumber == 2) {
         this.shortBreakTime = event.target.value * 60;
+        localStorage.setItem("shortBreakTime", this.shortBreakTime);
+
       }
       if (tabNumber == 3) {
         this.longBreakTime = event.target.value * 60;
+        localStorage.setItem("longBreakTime", this.longBreakTime);
       }
       this.switchTab(this.tab);
+    },
+    longBreakInterval(event){
+      this.longBreakStartInterval = event.target.value;
+      localStorage.setItem("longBreakInterval" , this.longBreakStartInterval);
     },
     confirmChangeTab(tabNumber) {
       if (confirm('The timer is still running, are you sure you want to switch?')) {
