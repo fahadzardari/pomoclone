@@ -7,7 +7,7 @@
     <div class="grid md:grid-cols-4">
       <div></div>
 
-      <div class="container col-span-2 divide-y-[1px] divide-black divide-opacity-20">
+      <div class="container col-span-2 ">
         <div class="flex flex-row justify-between py-4 text-sm md:text-lg text-white">
           <div>
             <h1 class="font-extrabold">PomoFocus</h1>
@@ -17,6 +17,12 @@
               @click="settingsShow = !settingsShow">Settings</button>
           </div>
         </div>
+        <div class="h-1 bg-gray-600 rounded-lg">
+          <div :style="`width:`+progressBar+ `%;`" :class='`h-1   bg-gray-300`'>
+
+          </div>
+        </div>
+
         <div class="container flex justify-center items-center">
           <div class="bg-white bg-opacity-20 p-4 w-8/12 items-center rounded-md mt-6">
 
@@ -45,7 +51,7 @@
 
             <div class="buttons flex items-center justify-center font-bold text-xl ">
 
-              <button class="py-3 px-10 bg-white border-4 border-b-black " v-show="!timerRunning" @click="startTimer()">
+              <button class="py-3 px-10 bg-white border-4 border-b-black " v-if="!timerRunning"  @click="startTimer()">
                 <span :class="
                   tab == 1
                     ? 'text-[#D95550]'
@@ -56,7 +62,7 @@
                   START
                 </span>
               </button>
-              <button class="py-3 px-10 bg-white  border" v-show="timerRunning" @click="stopTimer()">
+              <button class="py-3 px-10 bg-white  border" v-else  @click="stopTimer()">
                 <span :class="
                   tab == 1
                     ? 'text-[#D95550]'
@@ -169,7 +175,9 @@ export default {
       settingsShow: false,
       autoStartBreak: true,
       autoStartPomodoro: true,
-      longBreakStartInterval: 4
+      longBreakStartInterval: 4,
+      totalTime:0,
+      progressBar: 0,
 
 
     }
@@ -177,9 +185,10 @@ export default {
 
   mounted() {
     this.pomodoroTime = localStorage.getItem("pomodoroTime") || 1500;
+    this.resetTimeRemaining(this.pomodoroTime);
+
     this.shortBreakTime = localStorage.getItem("shortBreakTime") || 300;
     this.longBreakTime = localStorage.getItem("longBreakTime") || 900;
-    this.resetTimeRemaining(this.pomodoroTime);
     this.autoStartBreak = localStorage.getitem("autoStartBreak") || true;
     this.autoStartPomodoro = localStorage.getItem("autoStartPomodoro") || true;
     this.longBreakStartInterval = localStorage.getItem("longBreakInterval") || 4;
@@ -188,13 +197,13 @@ export default {
 
   methods: {
     startTimer() {
-
       this.timerRunning = true;
       this.timer();
     },
     timer() {
       this.interval = setInterval(() => {
         this.timeRemaining--;
+        this.progressBar = (this.totalTime - this.timeRemaining ) /this.totalTime * 100;
         this.updateTime();
         if (this.timeRemaining <= 0) {
 
@@ -268,6 +277,7 @@ export default {
     },
     resetTimeRemaining(time) {
       this.timeRemaining = time;
+      this.totalTime = time;
       this.updateTime();
     },
     tabTimeChanged(event, tabNumber) {
