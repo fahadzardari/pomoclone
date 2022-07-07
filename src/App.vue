@@ -83,36 +83,37 @@
             <div
               class="settings bg-white w-9/12 md:w-4/12 rounded-md divide-y-[1px] divide-black divide-opacity-20 p-3 overflow-hidden  scroll-m-1">
               <div class="flex flex-row justify-between items-center mb-2">
-                <span class="font-medium text-gray-400 text-opacity-50 capitalize">TIMER SETTINGS</span>
+                <span class="font-medium text-sm lg:text-lg  text-gray-400 text-opacity-50 capitalize">TIMER
+                  SETTINGS</span>
                 <div class="cursor-pointer" @click="settingsShow = !settingsShow">
                   <img src="./assets/remove-black-sm.png" alt="close button" class="w-3 h-3 ">
                 </div>
               </div>
               <div class="timesettings py-5 ">
-                <span class="font-bold">Time (minutes)</span>
+                <span class="font-bold text-sm lg-text-md">Time (minutes)</span>
                 <div class="flex flex-row">
                   <div>
-                    <label for="pomodoroTime" class="text-gray-400 ">Pomodoro</label> <br>
+                    <label for="pomodoroTime" class="text-gray-400 text-sm lg-text-md">Pomodoro</label> <br>
                     <input type="number" name="pomodoroTime" min="0" :value="pomodoroTime / 60"
                       @change="tabTimeChanged($event, 1)"
                       class="bg-gray-300 bg-opacity-30 w-7/12 font-light rounded-md px-2 py-2">
                   </div>
                   <div>
-                    <label for="pomodoroTime" class="text-gray-400 ">Short Break</label> <br>
+                    <label for="pomodoroTime" class="text-gray-400 text-sm lg-text-md">Short Break</label> <br>
                     <input type="number" name="pomodoroTime" min="0" :value="shortBreakTime / 60"
                       @change="tabTimeChanged($event, 2)"
                       class="bg-gray-300 bg-opacity-30 w-7/12 font-light rounded-md px-2 py-2">
                   </div>
                   <div>
-                    <label for="pomodoroTime" class="text-gray-400 ">Long Break</label> <br>
+                    <label for="pomodoroTime" class="text-gray-400 text-sm lg-text-md">Long Break</label> <br>
                     <input type="number" name="pomodoroTime" min="0" :value="longBreakTime / 60"
                       @change="tabTimeChanged($event, 3)"
                       class="bg-gray-300 bg-opacity-30 w-8/12 font-light rounded-md px-2 py-2">
                   </div>
                 </div>
               </div>
-              <div class="flex flex-row justify-between py-5 pr-7">
-                <span class="text-lg font-bold">Auto Starts Break?</span>
+              <div class="flex flex-row justify-between items-center py-5 pr-7">
+                <span class="font-bold text-sm lg-text-md">Auto Starts Break?</span>
                 <label for="check1">
                   <input type="checkbox" id="check1" v-model="autoStartBreak" @change="autoStartBreakStore()"
                     class="sr-only">
@@ -124,8 +125,8 @@
 
                 </label>
               </div>
-              <div class="flex flex-row justify-between py-5 pr-7">
-                <span class="text-lg font-bold">Auto Starts Pomodoro?</span>
+              <div class="flex flex-row justify-between py-5 pr-7 items-center">
+                <span class=" font-bold text-sm lg-text-md">Auto Starts Pomodoro?</span>
                 <label for="check2" class="">
                   <input type="checkbox" id="check2" v-model="autoStartPomodoro" class="sr-only ">
                   <div class="relative rounded-full  cursor-pointer w-16 h-8"
@@ -137,42 +138,58 @@
 
                 </label>
               </div>
-              <div class="flex flex-row justify-between py-5 pr-7">
+              <div class="flex flex-row justify-between py-5 pr-7 items-center">
 
-                <label for="interval" class="text-lg font-bold ">Long Break Interval</label>
+                <label for="interval" class="font-bold text-sm lg-text-md">Long Break Interval</label>
                 <input type="number" name="interval" min="1" :value="longBreakStartInterval"
                   @change="longBreakInterval($event)"
                   class="bg-gray-300 bg-opacity-30 w-2/12 font-light rounded-md px-2 py-2">
 
               </div>
 
-              <div class="flex flex-row justify-between py-5 pr-7">
-                <label for="tickingSound" class="text-lg font-bold ">Alarm Sound</label>
-                <select name="tickingSound" v-model="tickingSound" class="px-3 py-2 rounded-md " @change="tickingSoundStore()">
-                  <option  value="0">None</option>
-                  <option  value="1">Ticking Slow</option>
-                  <option  value="2">Ticking Fast</option>
-                    
+              <div class="flex flex-row justify-between py-5 pr-7 items-center">
+                <label for="tickingSound" class="font-bold text-sm lg-text-md">Alarm Sound</label>
+                <select name="tickingSound" v-model="tickingSound" class="px-3 py-2 rounded-md text-sm"
+                  @change="tickingSoundStore()">
+                  <option value="0">None</option>
+                  <option value="1">Ticking Slow</option>
+                  <option value="2">Ticking Fast</option>
+
                 </select>
               </div>
-       
+
+              <div class="flex flex-row justify-between py-5 pr-7 items-center">
+                <label for="alarmSound" class="font-bold text-sm lg-text-md">Alarm Sound</label>
+                <select name="alarmSound" v-model="alarmSound" class="px-3 py-2 rounded-md text-sm"
+                  @change="alarmSoundStore()">
+                  <option value="0">None</option>
+                  <option value="1">Bell</option>
+                  <option value="2">Bird</option>
+                  <option value="3">Digital</option>
+                  <option value="4">Kitchen</option>
+                  <option value="5">Wood</option>
+
+
+                </select>
+              </div>
+
+            </div>
+
+
+
+
+
+
           </div>
-
-
-
-
-
-
         </div>
+
+
+
+        <div></div>
       </div>
-
-
-
-      <div></div>
     </div>
   </div>
-  </div>
-  <div >
+  <div v-show="!settingsShow">
     <div class="md:w-[620px] w-full p-2 mx-auto">
       <div class="w-full pt-12">
         <h1 class="md:text-[34px] text-[24px] leading-10 text-[#541c1f] font-bold leading-0">
@@ -284,11 +301,11 @@
     </div>
 
     <div class="flex justify-center items-center gap-4 mt-4 mb-6">
-      <img src="./assets/facebook.png" class="w-10 h-10 bg-gray-400 p-1 rounded-full" alt="" />
+      <img src="" class="w-10 h-10 bg-gray-400 p-1 rounded-full" alt="" />
 
-      <img src="./assets/twitter.png" class="w-10 h-10 bg-gray-400 p-1 rounded-full" alt="" />
+      <img src="" class="w-10 h-10 bg-gray-400 p-1 rounded-full" alt="" />
 
-      <img src="./assets/stripe-climate-badge.png" class="w-10 h-10 bg-gray-400 p-1 rounded-full" alt="" />
+      <img src="" class="w-10 h-10 bg-gray-400 p-1 rounded-full" alt="" />
     </div>
 
     <div class="text-center my-4 text-[#785e60]">
@@ -331,8 +348,8 @@ export default {
       totalTime: 0,
       progressBar: 0,
       currentAudio: null,
-      tickingSound: null,
-      alarmSound: alarm_bell
+      tickingSound: 0,
+      alarmSound: 0
 
 
     }
@@ -340,17 +357,20 @@ export default {
 
   mounted() {
 
-    this.pomodoroTime = localStorage.getItem("pomodoroTime") || 1500;
+    //this.pomodoroTime = localStorage.getItem("pomodoroTime") || 1500;
     this.shortBreakTime = localStorage.getItem("shortBreakTime") || 300;
-    //this.pomodoroTime = 3;
+    this.pomodoroTime = 3;
     //this.shortBreakTime = 3;
     this.autoStartBreak = localStorage.getItem("autoStartBreak") || false;
     this.resetTimeRemaining(this.pomodoroTime);
     this.longBreakStartInterval = localStorage.getItem("longBreakInterval") || 4;
     this.longBreakTime = localStorage.getItem("longBreakTime") || 900;
     this.tickingSound = localStorage.getItem("tickingSound") || 1;
+    this.alarmSound = localStorage.getItem("alarmSound") || 0;
+
     //this.autoStartPomodoro = localStorage.getitem("autoStartBreak") || false;
     this.currentAudio = new Audio();
+    this.alarmPlay();
   },
 
   methods: {
@@ -365,8 +385,8 @@ export default {
         this.progressBar = (this.totalTime - this.timeRemaining) / this.totalTime * 100;
         this.updateTime();
         if (this.timeRemaining <= 0) {
-
           this.stopTimer();
+          this.alarmPlay();
           if (this.tab == 1) {
 
             if (this.autoStartBreak) {
@@ -383,17 +403,19 @@ export default {
               this.startTimer();
               this.shortBreakCounter();
             }
-          } else
-            if (this.tab == 2 || this.tab == 3) {
-              if (this.autoStartPomodoro) {
-                this.switchTab(1);
-                this.startTimer();
+            } else
+              if (this.tab == 2 || this.tab == 3) {
+                 if (this.autoStartPomodoro) {
+                    this.switchTab(1);
+                    this.startTimer();
               }
+            } else {
+
+              this.switchTab(this.tab);
             }
         }
 
       }, 1000);
-
     },
     stopTimer() {
       this.timerRunning = false;
@@ -480,16 +502,34 @@ export default {
     autoStartPomodoroStore() {
       localStorage.setItem("autoStartPomodoro", this.autoStartPomodoro);
     },
-    tickingSoundStore(){
-        localStorage.setItem("tickingSound" , this.tickingSound);
+    tickingSoundStore() {
+      localStorage.setItem("tickingSound", this.tickingSound);
+    },
+    alarmSoundStore() {
+      localStorage.setItem("alarmSound", this.alarmSound);
+
     },
     tickingSoundPlay() {
       if (this.tickingSound != 0) {
-        
-        this.currentAudio.src = (this.tickingSound == 1) ? ticking_slow : ticking_fast ;
+
+        this.currentAudio.src = (this.tickingSound == 1) ? ticking_slow : ticking_fast;
+
         this.currentAudio.load();
         this.currentAudio.loop = true;
         this.currentAudio.play();
+
+      }
+    },
+    alarmPlay() {
+      if (this.alarmSound != 0) {
+        this.currentAudio.src = (this.alarmSound == 1) ? alarm_bell :
+          (this.alarmSound == 2) ? alarm_bird :
+            (this.alarmSound == 3) ? alarm_digital :
+              (this.alarmSound == 4) ? alarm_kitchen : alarm_wood;
+        this.currentAudio.load();
+        this.currentAudio.loop = false;
+        this.currentAudio.play();
+
       }
     },
     confirmChangeTab(tabNumber) {
