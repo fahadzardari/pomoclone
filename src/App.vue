@@ -17,8 +17,8 @@
               @click="settingsShow = !settingsShow">Settings</button>
           </div>
         </div>
-        <div class="h-1 bg-gray-600 rounded-lg">
-          <div :style="`width:`+progressBar+ `%;`" :class='`h-1   bg-gray-300`'>
+        <div class="h-0.5 bg-gray-600 rounded-lg">
+          <div :style="`width:` + progressBar + `%;`" :class='`h-0.5   bg-gray-300`'>
 
           </div>
         </div>
@@ -44,14 +44,14 @@
               </div>
             </div>
             <div class="text-center p-3 ">
-              <span class="text-6xl proportional-nums md:text-9xl text-white ">
+              <span class="text-white lg:text-[120px] text-[100px] text-center font-bold ">
                 {{ timeToShow }}
               </span>
             </div>
 
             <div class="buttons flex items-center justify-center font-bold text-xl ">
 
-              <button class="py-3 px-10 bg-white border-4 border-b-black " v-if="!timerRunning"  @click="startTimer()">
+              <button class="py-3 px-10 bg-white border-4 border-b-black " v-if="!timerRunning" @click="startTimer()">
                 <span :class="
                   tab == 1
                     ? 'text-[#D95550]'
@@ -62,7 +62,7 @@
                   START
                 </span>
               </button>
-              <button class="py-3 px-10 bg-white  border" v-else  @click="stopTimer()">
+              <button class="py-3 px-10 bg-white  border" v-else @click="stopTimer()">
                 <span :class="
                   tab == 1
                     ? 'text-[#D95550]'
@@ -113,29 +113,37 @@
               </div>
               <div class="flex flex-row justify-between py-5 pr-7">
                 <span class="text-lg font-bold">Auto Starts Break?</span>
-                <label for="check1" class="relative rounded-full  cursor-pointer w-16 h-8"
-                  :class="autoStartBreak ? 'bg-[#84c733]' : 'bg-[#cccccc]'">
-                  <input type="checkbox" id="check1" v-model="autoStartBreak" class="sr-only peer">
-                  <span class="bg-white w-2/5 h-4/5 absolute rounded-full left-1 top-[3px] peer-checked:left-9 "></span>
+                <label for="check1">
+                  <input type="checkbox" id="check1" v-model="autoStartBreak" @change="autoStartBreakStore()"
+                    class="sr-only">
+                  <div class="relative rounded-full  cursor-pointer w-16 h-8"
+                    :class="autoStartBreak ? 'bg-[#84c733]' : 'bg-[#cccccc]'">
+                    <span class="bg-white w-2/5 h-4/5 absolute rounded-full top-[3px]  "
+                      :class="autoStartBreak ? `left-9` : ` `"></span>
+                  </div>
 
                 </label>
               </div>
               <div class="flex flex-row justify-between py-5 pr-7">
                 <span class="text-lg font-bold">Auto Starts Pomodoro?</span>
-                <label for="check2" class="relative rounded-full  cursor-pointer w-16 h-8"
-                  :class="autoStartPomodoro ? 'bg-[#84c733]' : 'bg-[#cccccc]'">
-                  <input type="checkbox" id="check2" v-model="autoStartPomodoro" class="sr-only peer">
-                  <span class="bg-white w-2/5 h-4/5 absolute rounded-full left-1 top-[3px] peer-checked:left-9 "></span>
+                <label for="check2" class="">
+                  <input type="checkbox" id="check2" v-model="autoStartPomodoro" class="sr-only ">
+                  <div class="relative rounded-full  cursor-pointer w-16 h-8"
+                    :class="autoStartPomodoro ? 'bg-[#84c733]' : 'bg-[#cccccc]'">
+
+                    <span class="bg-white w-2/5 h-4/5 absolute rounded-full top-[3px] "
+                      :class="autoStartPomodoro ? 'left-9' : 'left-1'"></span>
+                  </div>
 
                 </label>
               </div>
               <div class="flex flex-row justify-between py-5 pr-7">
-                
-                    <label for="interval" class="text-lg font-bold ">Long Break Interval</label>
-                    <input type="number" name="interval" min="1" :value="longBreakStartInterval"
-                      @change="longBreakInterval($event)"
-                      class="bg-gray-300 bg-opacity-30 w-2/12 font-light rounded-md px-2 py-2">
-                
+
+                <label for="interval" class="text-lg font-bold ">Long Break Interval</label>
+                <input type="number" name="interval" min="1" :value="longBreakStartInterval"
+                  @change="longBreakInterval($event)"
+                  class="bg-gray-300 bg-opacity-30 w-2/12 font-light rounded-md px-2 py-2">
+
               </div>
 
             </div>
@@ -158,6 +166,13 @@
 </template>
 
 <script>
+import ticking_slow from "./assets/audio/ticking-slow.mp3";
+import ticking_fast from "./assets/audio/ticking-fast.mp3";
+import alarm_bell from "./assets/audio/alarm-bell.mp3";
+import alarm_bird from "./assets/audio/alarm-bird.mp3";
+import alarm_digital from "./assets/audio/alarm-digital.mp3";
+import alarm_kitchen from "./assets/audio/alarm-kitchen.mp3";
+import alarm_wood from "./assets/audio/alarm-wood.mp3";
 
 export default {
   data() {
@@ -173,26 +188,32 @@ export default {
       timerRunning: false,
       interval: null,
       settingsShow: false,
-      autoStartBreak: true,
-      autoStartPomodoro: true,
+      autoStartBreak: false,
+      autoStartPomodoro: false,
       longBreakStartInterval: 4,
-      totalTime:0,
+      counter: 0,
+      totalTime: 0,
       progressBar: 0,
+      currentAudio: null,
+      tickingSound: ticking_fast,
+      alarmSound: alarm_bell
 
 
     }
   },
 
   mounted() {
+
     this.pomodoroTime = localStorage.getItem("pomodoroTime") || 1500;
-    this.resetTimeRemaining(this.pomodoroTime);
-
     this.shortBreakTime = localStorage.getItem("shortBreakTime") || 300;
-    this.longBreakTime = localStorage.getItem("longBreakTime") || 900;
-    this.autoStartBreak = localStorage.getitem("autoStartBreak") || true;
-    this.autoStartPomodoro = localStorage.getItem("autoStartPomodoro") || true;
+    //this.pomodoroTime = 3;
+    //this.shortBreakTime = 3;
+    this.autoStartBreak = localStorage.getItem("autoStartBreak") || false;
+    this.resetTimeRemaining(this.pomodoroTime);
     this.longBreakStartInterval = localStorage.getItem("longBreakInterval") || 4;
-
+    this.longBreakTime = localStorage.getItem("longBreakTime") || 900;
+    //this.autoStartPomodoro = localStorage.getitem("autoStartBreak") || false;
+    this.currentAudio = new Audio();
   },
 
   methods: {
@@ -201,9 +222,10 @@ export default {
       this.timer();
     },
     timer() {
+      this.tickingSoundPlay();
       this.interval = setInterval(() => {
         this.timeRemaining--;
-        this.progressBar = (this.totalTime - this.timeRemaining ) /this.totalTime * 100;
+        this.progressBar = (this.totalTime - this.timeRemaining) / this.totalTime * 100;
         this.updateTime();
         if (this.timeRemaining <= 0) {
 
@@ -211,15 +233,23 @@ export default {
           if (this.tab == 1) {
 
             if (this.autoStartBreak) {
-              this.tab = 2;
-              this.resetTimeRemaining(this.shortBreakTime);
+              // if(this.counter == this.longBreakStartInterval){
+              //     alert('inside long break interval');
+              //     this.counter =0;
+              //     this.tab=3;
+              //     this.resetTimeRemaining(this.longBreakTime);
+
+              //     this.startTimer();
+
+              // }
+              this.switchTab(2);
               this.startTimer();
+              this.shortBreakCounter();
             }
           } else
             if (this.tab == 2 || this.tab == 3) {
               if (this.autoStartPomodoro) {
-                this.tab = 1;
-                this.resetTimeRemaining(this.pomodoroTime);
+                this.switchTab(1);
                 this.startTimer();
               }
             }
@@ -230,7 +260,10 @@ export default {
     },
     stopTimer() {
       this.timerRunning = false;
+      this.currentAudio.pause();
       clearInterval(this.interval);
+      //if (this.timerRunning) {
+      //} 
 
     },
     updateTime() {
@@ -254,25 +287,22 @@ export default {
           exit;
         }
       }
-
+      this.stopTimer();
       if (tabNumber == 1) {
         this.tab = 1;
-        this.stopTimer();
         this.resetTimeRemaining(this.pomodoroTime);
 
-      }
-      if (tabNumber == 2) {
-        this.tab = 2;
-        this.stopTimer();
-        this.resetTimeRemaining(this.shortBreakTime);
+      } else
+        if (tabNumber == 2) {
+          this.tab = 2;
+          this.resetTimeRemaining(this.shortBreakTime);
 
-      }
-      if (tabNumber == 3) {
-        this.tab = 3;
-        this.stopTimer();
-        this.resetTimeRemaining(this.longBreakTime);
+        } else
+          if (tabNumber == 3) {
+            this.tab = 3;
+            this.resetTimeRemaining(this.longBreakTime);
 
-      }
+          }
 
     },
     resetTimeRemaining(time) {
@@ -296,9 +326,31 @@ export default {
       }
       this.switchTab(this.tab);
     },
-    longBreakInterval(event){
+    longBreakInterval(event) {
       this.longBreakStartInterval = event.target.value;
-      localStorage.setItem("longBreakInterval" , this.longBreakStartInterval);
+      localStorage.setItem("longBreakInterval", this.longBreakStartInterval);
+    },
+    shortBreakCounter() {
+      if (this.tab === 2) {
+        //alert(this.counter);
+        this.counter++;
+      }
+    },
+    autoStartBreakStore() {
+      localStorage.setItem("autoStartBreak", this.autoStartBreak);
+      alert(localStorage.getItem("autoStartBreak"));
+    },
+    autoStartPomodoroStore() {
+      localStorage.setItem("autoStartPomodoro", this.autoStartPomodoro);
+    },
+    tickingSoundPlay() {
+    if(this.tickingSound){
+
+      this.currentAudio.src = this.tickingSound;
+      this.currentAudio.load();
+      this.currentAudio.loop = true;
+      this.currentAudio.play();
+    }
     },
     confirmChangeTab(tabNumber) {
       if (confirm('The timer is still running, are you sure you want to switch?')) {
