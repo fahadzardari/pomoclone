@@ -148,7 +148,7 @@
               </div>
 
               <div class="flex flex-row justify-between py-5 pr-7 items-center">
-                <label for="tickingSound" class="font-bold text-sm lg-text-md">Alarm Sound</label>
+                <label for="tickingSound" class="font-bold text-sm lg-text-md">Ticking Sound</label>
                 <select name="tickingSound" v-model="tickingSound" class="px-3 py-2 rounded-md text-sm"
                   @change="tickingSoundStore()">
                   <option value="0">None</option>
@@ -357,10 +357,8 @@ export default {
 
   mounted() {
 
-    //this.pomodoroTime = localStorage.getItem("pomodoroTime") || 1500;
+    this.pomodoroTime = localStorage.getItem("pomodoroTime") || 1500;
     this.shortBreakTime = localStorage.getItem("shortBreakTime") || 300;
-    this.pomodoroTime = 3;
-    //this.shortBreakTime = 3;
     this.autoStartBreak = localStorage.getItem("autoStartBreak") || false;
     this.resetTimeRemaining(this.pomodoroTime);
     this.longBreakStartInterval = localStorage.getItem("longBreakInterval") || 4;
@@ -370,7 +368,6 @@ export default {
 
     //this.autoStartPomodoro = localStorage.getitem("autoStartBreak") || false;
     this.currentAudio = new Audio();
-    this.alarmPlay();
   },
 
   methods: {
@@ -386,9 +383,10 @@ export default {
         this.updateTime();
         if (this.timeRemaining <= 0) {
           this.stopTimer();
-          this.alarmPlay();
           if (this.tab == 1) {
-
+            
+            this.switchTab(2);
+            this.alarmPlay();
             if (this.autoStartBreak) {
               // if(this.counter == this.longBreakStartInterval){
               //     alert('inside long break interval');
@@ -399,19 +397,16 @@ export default {
               //     this.startTimer();
 
               // }
-              this.switchTab(2);
+
               this.startTimer();
               this.shortBreakCounter();
             }
-            } else
-              if (this.tab == 2 || this.tab == 3) {
-                 if (this.autoStartPomodoro) {
-                    this.switchTab(1);
-                    this.startTimer();
+          } else
+            if (this.tab == 2 || this.tab == 3) {
+              this.switchTab(1);
+              if (this.autoStartPomodoro) {
+                this.startTimer();
               }
-            } else {
-
-              this.switchTab(this.tab);
             }
         }
 
@@ -510,14 +505,14 @@ export default {
 
     },
     tickingSoundPlay() {
-      if (this.tickingSound != 0) {
+      if (this.tab === 1) {
+        if (this.tickingSound != 0) {
+          this.currentAudio.src = (this.tickingSound == 1) ? ticking_slow : ticking_fast;
+          this.currentAudio.load();
+          this.currentAudio.loop = true;
+          this.currentAudio.play();
 
-        this.currentAudio.src = (this.tickingSound == 1) ? ticking_slow : ticking_fast;
-
-        this.currentAudio.load();
-        this.currentAudio.loop = true;
-        this.currentAudio.play();
-
+        }
       }
     },
     alarmPlay() {
@@ -531,6 +526,7 @@ export default {
         this.currentAudio.play();
 
       }
+    
     },
     confirmChangeTab(tabNumber) {
       if (confirm('The timer is still running, are you sure you want to switch?')) {
