@@ -8,7 +8,7 @@
       <div></div>
 
       <div class="container col-span-2 ">
-        <div class="flex flex-row justify-between py-4 text-sm md:text-lg text-white">
+        <div class="flex flex-row justify-between py-4 text-sm md:text-lg text-white mx-4">
           <div>
             <h1 class="font-extrabold">PomoFocus</h1>
           </div>
@@ -44,7 +44,7 @@
               </div>
             </div>
             <div class="text-center p-3 ">
-              <span class="text-white lg:text-[120px] text-[100px] text-center font-bold ">
+              <span class="text-white text-[75px] lg:text-[120px]  text-center font-bold ">
                 {{ timeToShow }}
               </span>
             </div>
@@ -81,7 +81,7 @@
           <div v-if="settingsShow"
             class="bg-[#00000066] flex justify-center lg:px-8 py-20 p-2 fixed top-0 w-screen min-h-screen">
             <div
-              class="settings bg-white w-9/12 md:w-4/12 rounded-md divide-y-[1px] divide-black divide-opacity-20 p-3">
+              class="settings bg-white w-9/12 md:w-4/12 rounded-md divide-y-[1px] divide-black divide-opacity-20 p-3 overflow-hidden  scroll-m-1">
               <div class="flex flex-row justify-between items-center mb-2">
                 <span class="font-medium text-gray-400 text-opacity-50 capitalize">TIMER SETTINGS</span>
                 <div class="cursor-pointer" @click="settingsShow = !settingsShow">
@@ -146,7 +146,16 @@
 
               </div>
 
-            </div>
+              <div class="flex flex-row justify-between py-5 pr-7">
+                <label for="tickingSound" class="text-lg font-bold ">Alarm Sound</label>
+                <select name="tickingSound" v-model="tickingSound" class="px-3 py-2 rounded-md " @change="tickingSoundStore()">
+                  <option  value="0">None</option>
+                  <option  value="1">Ticking Slow</option>
+                  <option  value="2">Ticking Fast</option>
+                    
+                </select>
+              </div>
+       
           </div>
 
 
@@ -162,7 +171,134 @@
       <div></div>
     </div>
   </div>
+  </div>
+  <div >
+    <div class="md:w-[620px] w-full p-2 mx-auto">
+      <div class="w-full pt-12">
+        <h1 class="md:text-[34px] text-[24px] leading-10 text-[#541c1f] font-bold leading-0">
+          An online Pomodoro Timer to boost your productivity
+        </h1>
+        <!-- <image src="/images/heroimage2.png" class="heroimage__img"></image> -->
+      </div>
 
+      <div class="mt-14">
+        <h2 class="heading text-[24px] leading-10 text-[#541c1f] font-bold leading-0">
+          What is Pomofocus?
+        </h2>
+        <p class="py-4 text-[#785e60] text-[18px]">
+          Pomofocus is a customizable pomodoro timer that works on desktop &
+          mobile browser. The aim of this app is to help you focus on any task
+          you are working on, such as study, writing, or coding. This app is
+          inspired by
+          <a href="https://francescocirillo.com/pages/pomodoro-technique" target="_blank" rel="noopener">Pomodoro
+            Technique</a>
+          which is a time management method developed by Francesco Cirillo.
+        </p>
+      </div>
+
+      <div class="mt-8">
+        <h2 class="heading text-[24px] leading-10 text-[#541c1f] font-bold leading-0">
+          What is Pomodoro Technique?
+        </h2>
+        <p class="py-4 text-[#785e60] text-[18px]">
+          The Pomodoro Technique is created by Francesco Cirillo for a more
+          productive way to work and study. The technique uses a timer to break
+          down work into intervals, traditionally 25 minutes in length,
+          separated by short breaks. Each interval is known as a pomodoro, from
+          the Italian word for 'tomato', after the tomato-shaped kitchen timer
+          that Cirillo used as a university student. -
+          <a href="https://en.wikipedia.org/wiki/Pomodoro_Technique" target="_blank" rel="noopener">Wikipedia</a>
+        </p>
+      </div>
+
+      <div class="mt-8">
+        <h2 class="heading text-[24px] leading-10 text-[#541c1f] font-bold leading-0">
+          How to use the Pomodoro Timer?
+        </h2>
+        <ul class="py-2 pl-1">
+          <li class="text-[#785e60] text-[16px]">
+            <span class="text-[#785e60] px-2">1.</span>
+            <strong class="text-[#785e60] font-bold">Add tasks</strong> to work
+            on today
+          </li>
+          <li class="text-[#785e60] text-[16px] mt-3">
+            <span class="text-[#785e60] px-2">2.</span>
+            <strong class="text-[#785e60] font-bold">Set estimate pomodoros</strong>
+            (1 = 25min of work) for each tasks
+          </li>
+          <li class="text-[#785e60] text-[16px] mt-3">
+            <span class="text-[#785e60] px-2">3.</span>
+            <strong class="text-[#785e60] font-bold">Select a task</strong> to
+            work on
+          </li>
+          <li class="text-[#785e60] text-[16px] mt-3">
+            <span class="text-[#785e60] px-2">4.</span>
+            <strong class="text-[#785e60] font-bold">Start timer</strong> and
+            focus on the task for 25 minutes
+          </li>
+          <li class="text-[#785e60] text-[16px] mt-3">
+            <span class="text-[#785e60] px-2">5.</span>
+            <strong class="text-[#785e60] font-bold">Take a break</strong> for 5
+            minutes when the alarm ring
+          </li>
+          <li class="text-[#785e60] text-[16px] mt-3">
+            <span class="text-[#785e60] px-2">6.</span>
+            <strong class="text-[#785e60] font-bold">Iterate</strong> 3-5 until
+            you finish the tasks
+          </li>
+        </ul>
+      </div>
+
+      <div class="mt-6">
+        <h2 class="heading md:text-[24px] text-[20px] leading-10 text-[#541c1f] font-bold leading-0">
+          Features
+        </h2>
+        <ul class="list-disc py-4 pl-8">
+          <li class="text-[#785e60] text-[18px] mt-3">
+            <strong class="text-[#785e60] font-bold">Responsive design</strong>
+            that works with desktop and mobile
+          </li>
+          <li class="text-[#785e60] text-[18px] mt-3">
+            <strong class="text-[#785e60] font-bold">Color transition</strong>
+            to switch moods between work time and rest time
+          </li>
+          <li class="text-[#785e60] text-[18px] mt-3">
+            <strong class="text-[#785e60] font-bold">Audio notification</strong>
+            at the end of a timer period
+          </li>
+          <li class="text-[#785e60] text-[18px] mt-3">
+            <strong class="text-[#785e60] font-bold">Customizable timer</strong>
+            intervals to suit your preference
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <hr />
+
+    <div class="lg:w-4/12 md:w-10/12 mt-4 w-full text-center p-2 mx-auto">
+      <a class="px-2 text-[14px] font-bold text-[#785e60] cursor-pointer" href="/">HOME</a>
+      <a class="px-2 text-[14px] font-bold text-[#785e60] cursor-pointer" href="/privacy">PRIVACY</a>
+      <a class="px-2 text-[14px] font-bold text-[#785e60] cursor-pointer" href="mailto:pomofocus@gmail.com">CONTACT</a>
+      <a class="px-2 text-[14px] font-bold text-[#785e60] cursor-pointer" href="/app">SIMPLE PAGE</a>
+    </div>
+
+    <div class="flex justify-center items-center gap-4 mt-4 mb-6">
+      <img src="./assets/facebook.png" class="w-10 h-10 bg-gray-400 p-1 rounded-full" alt="" />
+
+      <img src="./assets/twitter.png" class="w-10 h-10 bg-gray-400 p-1 rounded-full" alt="" />
+
+      <img src="./assets/stripe-climate-badge.png" class="w-10 h-10 bg-gray-400 p-1 rounded-full" alt="" />
+    </div>
+
+    <div class="text-center my-4 text-[#785e60]">
+      Made by <span class="text-[#d95550] font-bold">Sagheer Hussain</span>
+    </div>
+
+    <div class="text-center my-4 text-[#785e60] text-xs">
+      ©Pomofocus 2022. All Rights Reserved.
+    </div>
+  </div>
 </template>
 
 <script>
@@ -195,7 +331,7 @@ export default {
       totalTime: 0,
       progressBar: 0,
       currentAudio: null,
-      tickingSound: ticking_fast,
+      tickingSound: null,
       alarmSound: alarm_bell
 
 
@@ -212,6 +348,7 @@ export default {
     this.resetTimeRemaining(this.pomodoroTime);
     this.longBreakStartInterval = localStorage.getItem("longBreakInterval") || 4;
     this.longBreakTime = localStorage.getItem("longBreakTime") || 900;
+    this.tickingSound = localStorage.getItem("tickingSound") || 1;
     //this.autoStartPomodoro = localStorage.getitem("autoStartBreak") || false;
     this.currentAudio = new Audio();
   },
@@ -343,14 +480,17 @@ export default {
     autoStartPomodoroStore() {
       localStorage.setItem("autoStartPomodoro", this.autoStartPomodoro);
     },
+    tickingSoundStore(){
+        localStorage.setItem("tickingSound" , this.tickingSound);
+    },
     tickingSoundPlay() {
-    if(this.tickingSound){
-
-      this.currentAudio.src = this.tickingSound;
-      this.currentAudio.load();
-      this.currentAudio.loop = true;
-      this.currentAudio.play();
-    }
+      if (this.tickingSound != 0) {
+        
+        this.currentAudio.src = (this.tickingSound == 1) ? ticking_slow : ticking_fast ;
+        this.currentAudio.load();
+        this.currentAudio.loop = true;
+        this.currentAudio.play();
+      }
     },
     confirmChangeTab(tabNumber) {
       if (confirm('The timer is still running, are you sure you want to switch?')) {
