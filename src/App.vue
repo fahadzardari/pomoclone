@@ -309,7 +309,7 @@
     </div>
 
     <div class="text-center my-4 text-[#785e60]">
-      Made by <span class="text-[#d95550] font-bold">Sagheer Hussain</span>
+      Made by <span class="text-[#d95550] font-bold">iradraZ dahaF</span>
     </div>
 
     <div class="text-center my-4 text-[#785e60] text-xs">
