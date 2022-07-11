@@ -161,7 +161,7 @@
               <div class="flex flex-row justify-between py-5 pr-7 items-center">
                 <label for="alarmSound" class="font-bold text-sm lg-text-md">Alarm Sound</label>
                 <select name="alarmSound" v-model="alarmSound" class="px-3 py-2 rounded-md text-sm"
-                  @change="alarmSoundStore()">
+                  @change="changeAlarmSound()">
                   <option value="0">None</option>
                   <option value="1">Bell</option>
                   <option value="2">Bird</option>
@@ -500,9 +500,21 @@ export default {
     tickingSoundStore() {
       localStorage.setItem("tickingSound", this.tickingSound);
     },
-    alarmSoundStore() {
+    changeAlarmSound(){
       localStorage.setItem("alarmSound", this.alarmSound);
-
+    //alert('changed');
+      if (this.alarmSound != 0) {
+        this.currentAudio.src = (this.alarmSound == 1) ? alarm_bell :
+          (this.alarmSound == 2) ? alarm_bird :
+            (this.alarmSound == 3) ? alarm_digital :
+              (this.alarmSound == 4) ? alarm_kitchen : alarm_wood;
+        this.currentAudio.load();
+        this.currentAudio.loop = false;
+        this.currentAudio.play();
+          setTimeout(()=>{
+            this.currentAudio.pause();
+          } , 2000);
+      }
     },
     tickingSoundPlay() {
       if (this.tab === 1) {
@@ -511,6 +523,7 @@ export default {
           this.currentAudio.load();
           this.currentAudio.loop = true;
           this.currentAudio.play();
+          
 
         }
       }
